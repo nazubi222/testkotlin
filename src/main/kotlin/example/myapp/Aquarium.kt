@@ -1,29 +1,45 @@
 package example.myapp
 
-class Aquarium(length: Int = 100, width: Int = 20, height: Int = 40) {
+import kotlin.math.PI
+
+open class Aquarium(open var length: Int = 100,open var width: Int = 20,open var height: Int = 40) {
 
     init {
         println("aquarium initializing")
     }
-//    init {
-//        println("Volume: ${width * length * height / 1000} liters")
-//    }
-    var length: Int = length
-    var width: Int = width
-    var height: Int = height
-    var volume: Int
+////    init {
+////        println("Volume: ${width * length * height / 1000} liters")
+////    }
+//    var length: Int = length
+//    var width: Int = width
+//    var height: Int = height
+    open var volume: Int
         get() = width * height * length / 1000
         set(value) {
             height = (value * 1000) / (width *length)
         }
-    constructor(numberofFish: Int): this(){
-        val tank = numberofFish * 2000 * 1.1
-        height = (tank / (length * width)).toInt()
-    }
+     open val shape = "rectangle"
+     open var water: Double = 0.0
+         get() = volume * 0.9
+//    constructor(numberofFish: Int): this(){
+//        val tank = numberofFish * 2000 * 1.1
+//        height = (tank / (length * width)).toInt()
+//    }
     fun  printSize(){
+        println(shape)
         println("Width: $width cm " +
                 "Length: $length cm " +
                 "Height: $height cm ")
-        println("Volume $volume liters")
+        println("Volume $volume liters Water: $water liters (${water/volume*100.0}% full) ")
     }
+}
+
+class TowerTank(override var height: Int, var diameter:Int): Aquarium(height = height, width = diameter, length = diameter){
+    override var volume: Int
+        get() = (width/2 * length/2 * height / 1000 * PI).toInt()
+        set(value) {
+            height = ((value *1000 / PI) / (width/2 * length/2)).toInt()
+        }
+    override var water = volume * 0.8
+    override val shape = "cylinder"
 }
